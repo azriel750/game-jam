@@ -1,29 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Boulier Num�rique</title>
-  </head>
+  <meta charset="UTF-8" />
+  <title>Boulier Drag & Drop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-  <h1>Jeu de Boulier</h1>
-  <div class="boulier">
-    <div class="colonne" data-multiplier="1">
-      <div class="titre">Unités</div>
-    </div>
-    <div class="colonne" data-multiplier="10">
-      <div class="titre">Dizaines</div>
-    </div>
-    <div class="colonne" data-multiplier="100">
-      <div class="titre">Centaines</div>
-    </div>
+  
+  <div id="controls">
+    <label><input type="checkbox" id="multiSelect" checked /> Sélection multiple (max 4 boules consécutives en haut)</label>
   </div>
-  <h1>Boulier à 9 colonnes</h1>
-  <div class="boulier" id="boulier"></div>
-  <div class="barre"></div>
+
+  <div id="boulier"></div>
   <div id="valeur">Valeur: 0</div>
-  <div id="score">Score : 0</div>
- 
-    
-  </body>
-  <script src="script.js"></script>
-  </html>
+
+<script src="/dist/script.js" type="module"></script>
+</body>
+</html>

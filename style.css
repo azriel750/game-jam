@@ -1,62 +1,29 @@
-    body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 40px;
-    }
-      .boulier {
-      display: grid;
-      grid-template-columns: repeat(9, 40px);
-      grid-template-rows: repeat(10, 40px);
-      gap: 2px;
-      margin-top: 20px;
-    }
-    .colonne {
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: center;
-    }
-    .titre {
+ #boulier {
+      position: relative;
+      width: 500px; /* 9 colonnes * 50px + marge */
+      height: 450px; /* 9 lignes * 50px */
+      border: 1px solid #333;
+      background: #f0f0f0;
+      user-select: none;
       margin-bottom: 10px;
-      font-weight: bold;
-    }
-    .bille {
-      width: 30px;
-      height: 30px;
-      background-color: #3498db;
-      border-radius: 50%;
-      margin: 5px;
-      cursor: pointer;
-    }
-    #score {
-      margin-top: 30px;
-      font-size: 24px;
-    }
-   
-    .case {
-      width: 40px;
-      height: 40px;
-      background: #fff;
-      border: 1px solid #ccc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     .boule {
-      width: 30px;
-      height: 30px;
+      position: absolute;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background-color: brown;
+      background: #2196f3;
+      border: 2px solid #1769aa;
+      box-sizing: border-box;
       cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
     }
-    .barre {
-      grid-column: 1 / span 9;
-      border-top: 4px solid black;
-      height: 4px;
-      margin-top: 5px;
+    .boule.selected {
+      background: #f44336;
+      border-color: #aa1515;
+      transform: scale(1.1);
+      z-index: 10;
     }
-    #valeur {
-      margin-top: 20px;
-      font-size: 20px;
+    #controls {
+      margin-bottom: 15px;
     }
