@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Boulier</title>
+  <link rel="stylesheet" href="boulier.css" />
+</head>
+
+<body>
+   <main class="app-container">
+    
+   
+    <section class="difficulty-select">
+      <label for="difficulty">Difficulté :</label>
+      <select id="difficulty">
+        <option value="super easy">Super facile</option>
+        <option value="easy">Facile</option>
+        <option value="medium">Moyen</option>
+        <option value="hard">Difficile</option>
+      </select>
+    </section>
+
+    <section class="calculation-display">
+      <h2>Résous :</h2>
+      <div id="calculation">7 + 3 = ?</div>
+    </section>
+
+  
+    <section class="result-check">
+      <button id="check-result">Vérifier</button>
+      <div id="feedback">➖</div>
+    </section>
+
+
+   <h1>Boulier</h1>
+  <div>Score : <span id="abacus-value">0</span></div>
+  <div id="abacus-grid"></div>
+    
+  </main>
+
+
+
+  <script src="/dist/script.js" type="module"></script>
+</body>
+
+</html>

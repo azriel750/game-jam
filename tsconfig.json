@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2024",
     "module": "ESNext",
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "lib": ["ES2016", "DOM"]
   },
   "include": ["src/**/*"]
 }

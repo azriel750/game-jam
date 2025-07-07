@@ -1,0 +1,212 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+      to right,
+      rgba(0, 255, 255, 0.05) 0,
+      rgba(0, 255, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 255, 255, 0.05) 0,
+      rgba(0, 255, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 40px
+    );
+  animation: scroll-grid 10s linear infinite;
+  z-index: -1;
+}
+
+@keyframes scroll-grid {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 40px;
+  }
+}
+body {
+  background: radial-gradient(circle at center, #000000 0%, #0f0f1b 100%);
+  font-family: 'Orbitron', sans-serif;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.scroll-gallery {
+  text-align: center;
+  max-width: 650px;
+  margin: 50px auto;
+}
+
+.scroll-gallery h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.slider-controls {
+  position: relative;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+.slides {
+  position: relative;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #121212;
+  box-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff inset;
+  padding: 20px;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 10px #ff00ff;
+  margin-bottom: 12px;
+}
+
+.slide p {
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: justify;
+  color: #ccc;
+}
+
+#slide1:checked ~ .slides #s1,
+#slide2:checked ~ .slides #s2,
+#slide3:checked ~ .slides #s3,
+#slide4:checked ~ .slides #s4,
+#slide5:checked ~ .slides #s5,
+#slide6:checked ~ .slides #s6,
+#slide7:checked ~ .slides #s7,
+#slide8:checked ~ .slides #s8,
+#slide9:checked ~ .slides #s9,
+#slide10:checked ~ .slides #s10,
+#slide11:checked ~ .slides #s11,
+#slide12:checked ~ .slides #s12,
+#slide13:checked ~ .slides #s13,
+#slide14:checked ~ .slides #s14,
+#slide15:checked ~ .slides #s15,
+#slide16:checked ~ .slides #s16,
+#slide17:checked ~ .slides #s17 {
+  opacity: 1;
+  position: relative;
+}
+
+.slider-nav {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.slider-nav label {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin: 0 5px;
+  background: #ff00ff;
+  background-color: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
+  transition: transform 0.3s;
+ transition: background-color 0.3s;
+}
+
+.slider-nav label:hover {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px #ff00ff;
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px #ff00ff;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px #ff00ff;
+  }
+}
+
+
+#slide1:checked ~ .slider-nav label[for="slide1"],
+#slide2:checked ~ .slider-nav label[for="slide2"],
+#slide3:checked ~ .slider-nav label[for="slide3"],
+#slide4:checked ~ .slider-nav label[for="slide4"],
+#slide5:checked ~ .slider-nav label[for="slide5"],
+#slide6:checked ~ .slider-nav label[for="slide6"],
+#slide7:checked ~ .slider-nav label[for="slide7"],
+#slide8:checked ~ .slider-nav label[for="slide8"],
+#slide9:checked ~ .slider-nav label[for="slide9"],
+#slide10:checked ~ .slider-nav label[for="slide10"],
+#slide11:checked ~ .slider-nav label[for="slide11"],
+#slide12:checked ~ .slider-nav label[for="slide12"],
+#slide13:checked ~ .slider-nav label[for="slide13"],
+#slide14:checked ~ .slider-nav label[for="slide14"],
+#slide15:checked ~ .slider-nav label[for="slide15"],
+#slide16:checked ~ .slider-nav label[for="slide16"],
+#slide17:checked ~ .slider-nav label[for="slide17"] {
+  background: #00ffff;
+  box-shadow: 0 0 5px #00ffff, 0 0 15px #00ffff;
+}
+
+@media screen and (max-width: 600px) {
+  .slide p {
+    font-size: 14px;
+  }
+  .slider-nav label {
+    width: 12px;
+    height: 12px;
+  }
+}
+.start-button {
+  text-align: center;
+  margin-top: 2rem;
+ 
+}
+
+.start-button a {
+  background-color: #333;
+  color:#00ffff;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.start-button a:hover {
+  background-color: #555;
+  box-shadow: 0 0 10px #ff00ff;
+  
+}

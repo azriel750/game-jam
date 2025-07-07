@@ -1,156 +1,113 @@
 "use strict";
-document.addEventListener("DOMContentLoaded", () => {
-    const boulier = document.getElementById("boulier");
-    const valeurDisplay = document.getElementById("valeur");
-    const multiCheckbox = document.getElementById("multiSelect");
-    const colonnes = 9;
-    const espace = 50;
-    const etat = Array.from({ length: colonnes }, () => ({
-        haut: 0,
-        bas: [4, 5, 6, 7], // positions fixes des boules basses (en bas de la colonne, indices 4 à 7)
-    }));
-    let selection = [];
-    let draggingInfo = null;
-    function dessiner() {
-        boulier.innerHTML = "";
-        for (let col = 0; col < colonnes; col++) {
-            const left = col * espace + 10;
-            // Boule du haut
-            const bouleHaut = document.createElement("div");
-            bouleHaut.className = "boule";
-            bouleHaut.style.left = `${left}px`;
-            bouleHaut.style.top = `${etat[col].haut * espace}px`;
-            bouleHaut.draggable = true;
-            bouleHaut.ondragstart = (e) => {
-                draggingInfo = { type: "haut", col };
-                e.dataTransfer.setData("text/plain", "haut");
-            };
-            bouleHaut.ondragend = () => {
-                draggingInfo = null;
-            };
-            boulier.appendChild(bouleHaut);
-            // Boules du bas (indices 0 à 3 correspondent à lignes 4 à 7)
-            etat[col].bas.forEach((ligneBas, index) => {
-                const boule = document.createElement("div");
-                boule.className = "boule";
-                boule.style.left = `${left}px`;
-                boule.style.top = `${ligneBas * espace}px`;
-                if (selection.find((s) => s.col === col && s.index === index)) {
-                    boule.classList.add("selected");
+const difficultySelect = document.getElementById("difficulty");
+const calculationEl = document.getElementById("calculation");
+const abacusValueEl = document.getElementById("abacus-value");
+const checkBtn = document.getElementById("check-result");
+const feedbackEl = document.getElementById("feedback");
+let correctResult = 0;
+let abacusValue = 0;
+function generateCalculation() {
+    let a, b, op;
+    const difficulty = difficultySelect.value;
+    switch (difficulty) {
+        case "super easy":
+            a = randInt(1, 1000);
+            b = 0;
+            op = "";
+            correctResult = a;
+            break;
+        case "easy":
+            a = randInt(1, 10);
+            b = randInt(1, 10);
+            op = "+";
+            correctResult = a + b;
+            break;
+        case "medium":
+            a = randInt(10, 100);
+            b = randInt(10, 100);
+            op = "-";
+            correctResult = a - b;
+            break;
+        case "hard":
+            a = randInt(2, 10);
+            b = randInt(2, 10);
+            op = "x";
+            correctResult = a * b;
+            break;
+    }
+    calculationEl.textContent = `${a} ${op} ${b} = ?`;
+    feedbackEl.textContent = "➖";
+    abacusValue = 0;
+    abacusValueEl.textContent = abacusValue.toString();
+}
+// Génère un entier aléatoire entre min et max inclus
+function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+// Modifie la valeur du boulier
+function updateAbacus(change) {
+    abacusValue += change;
+    if (abacusValue < 0)
+        abacusValue = 0;
+    abacusValueEl.textContent = abacusValue.toString();
+}
+function checkAnswer() {
+    if (abacusValue === correctResult) {
+        feedbackEl.textContent = "✅ Bravo !";
+        feedbackEl.style.color = "green";
+    }
+    else {
+        feedbackEl.textContent = "❌ Réessaie !";
+        feedbackEl.style.color = "red";
+    }
+}
+checkBtn.addEventListener("click", checkAnswer);
+difficultySelect.addEventListener("change", generateCalculation);
+generateCalculation();
+const grid = document.getElementById("abacus-grid");
+const columns = 9;
+let beads = [];
+function createBead(row, col, value) {
+    const bead = document.createElement("div");
+    bead.className = "bead";
+    bead.style.gridRow = row.toString();
+    bead.style.gridColumn = (col + 1).toString();
+    const b = { element: bead, active: false, value, row, col };
+    bead.addEventListener("click", () => {
+        const isLowerBead = row >= 4;
+        if (isLowerBead) {
+            const columnBeads = beads.filter(bd => bd.col === col && bd.row >= 4);
+            const toggleTo = !b.active;
+            for (const bd of columnBeads) {
+                if (bd.row >= row) {
+                    bd.active = toggleTo;
+                    bd.element.style.transform = toggleTo ? "translateY(-20px)" : "translateY(0)";
                 }
-                boule.onclick = (e) => {
-                    if (!multiCheckbox.checked) {
-                        selection = [{ col, index }];
-                    }
-                    else {
-                        // Multi sélection: uniquement les boules du haut contiguës dans la pile basse
-                        const indicesInCol = selection
-                            .filter((s) => s.col === col)
-                            .map((s) => s.index);
-                        let newIndices;
-                        if (indicesInCol.includes(index)) {
-                            newIndices = indicesInCol.filter((i) => i !== index);
-                        }
-                        else {
-                            newIndices = [...indicesInCol, index];
-                        }
-                        newIndices.sort((a, b) => a - b);
-                        // Vérifier que ce sont les premières boules consécutives (0,1,2,...)
-                        let valide = true;
-                        for (let i = 0; i < newIndices.length; i++) {
-                            if (newIndices[i] !== i) {
-                                valide = false;
-                                break;
-                            }
-                        }
-                        if (valide && newIndices.length <= 4) {
-                            selection = newIndices.map((idx) => ({ col, index: idx }));
-                        }
-                        else {
-                            alert("La sélection multiple doit concerner uniquement les boules consécutives en haut de la pile basse, " +
-                                "et au maximum 4 boules.");
-                        }
-                    }
-                    dessiner();
-                    e.stopPropagation();
-                };
-                boule.draggable = true;
-                boule.ondragstart = (e) => {
-                    if (!selection.find((s) => s.col === col && s.index === index)) {
-                        selection = [{ col, index }];
-                    }
-                    draggingInfo = {
-                        type: "bas",
-                        col,
-                        indices: selection.filter((s) => s.col === col).map((s) => s.index),
-                    };
-                    e.dataTransfer.setData("text/plain", "bas");
-                };
-                boule.ondragend = () => {
-                    draggingInfo = null;
-                };
-                boulier.appendChild(boule);
-            });
+            }
         }
+        else {
+            b.active = !b.active;
+            bead.style.transform = b.active ? "translateY(-100px)" : "translateY(0)";
+        }
+        updateScore();
+    });
+    grid.appendChild(bead);
+    return b;
+}
+for (let col = 0; col < columns; col++) {
+    const power = columns - 1 - col;
+    const multiplier = Math.pow(10, power);
+    beads.push(createBead(1, col, 5 * multiplier));
+    for (let row = 7; row <= 10; row++) {
+        beads.push(createBead(row, col, 1 * multiplier));
     }
-    boulier.ondragover = (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
-    };
-    boulier.ondrop = (e) => {
-        e.preventDefault();
-        if (!draggingInfo)
-            return;
-        const col = Math.floor(e.offsetX / espace);
-        const ligne = Math.floor(e.offsetY / espace);
-        if (col < 0 || col >= colonnes)
-            return;
-        if (draggingInfo.type === "haut") {
-            // Boule du haut : ligne 0 ou 1 uniquement
-            if (ligne === 0 || ligne === 1) {
-                etat[draggingInfo.col].haut = ligne;
-            }
-            selection = [];
-        }
-        else if (draggingInfo.type === "bas") {
-            if (col !== draggingInfo.col)
-                return; // dans la même colonne seulement
-            const nbBoules = draggingInfo.indices.length;
-            // Limiter la ligne minimale à 2 (pour ne pas passer au-dessus du haut)
-            let baseLigne = ligne;
-            if (baseLigne < 2)
-                baseLigne = 2;
-            // Limiter la ligne maximale pour que le groupe rentre dans la colonne (si 8 lignes du bas : lignes 2..9)
-            const maxLigne = 9; // dernière ligne de la colonne
-            if (baseLigne + nbBoules - 1 > maxLigne) {
-                baseLigne = maxLigne - nbBoules + 1;
-            }
-            // Déplacer les boules en conservant l'ordre
-            for (let i = 0; i < nbBoules; i++) {
-                etat[col].bas[draggingInfo.indices[i]] = baseLigne + i;
-            }
-            selection = [];
-        }
-        majValeur();
-        dessiner();
-    };
-    function majValeur() {
-        let total = 0;
-        for (let i = 0; i < colonnes; i++) {
-            const puissance = Math.pow(10, colonnes - 1 - i);
-            const haut = etat[i].haut === 1 ? 5 : 0;
-            // On compte uniquement les boules basses dans les indices 4 à 7
-            const bas = etat[i].bas.filter((x) => x >= 4 && x <= 7).length;
-            total += (haut + bas) * puissance;
-        }
-        valeurDisplay.textContent = `Valeur: ${total}`;
-    }
-    document.body.onclick = (e) => {
-        if (!e.target.classList.contains("boule")) {
-            selection = [];
-            dessiner();
-        }
-    };
-    dessiner();
-    majValeur();
-});
+}
+abacusValueEl.textContent = abacusValue.toString();
+const bar = document.createElement("div");
+bar.className = "bar";
+grid.appendChild(bar);
+function updateScore() {
+    const score = beads.filter(b => b.active).reduce((sum, b) => sum + b.value, 0);
+    abacusValue = score;
+    abacusValueEl.textContent = abacusValue.toString();
+}

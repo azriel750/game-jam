@@ -1,0 +1,187 @@
+ @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+ body::before {
+   content: "";
+   position: fixed;
+   inset: 0;
+   background: repeating-linear-gradient(to right,
+       rgba(0, 255, 255, 0.05) 0,
+       rgba(0, 255, 255, 0.05) 2px,
+       transparent 2px,
+       transparent 40px),
+     repeating-linear-gradient(to bottom,
+       rgba(0, 255, 255, 0.05) 0,
+       rgba(0, 255, 255, 0.05) 2px,
+       transparent 2px,
+       transparent 40px);
+   animation: scroll-grid 10s linear infinite;
+   z-index: -1;
+ }
+
+ body {
+   background: radial-gradient(circle at center, #000000 0%, #0f0f1b 100%);
+   font-family: 'Orbitron', sans-serif;
+   color: #000000;
+   margin: 0;
+   padding: 2rem;
+   text-align: center;
+ }
+ .app-container {
+   max-width: 500px;
+   margin: auto;
+   background: #fff;
+   padding: 2rem;
+   border-radius: 12px;
+   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+ }
+
+ .calculation-display #calculation {
+   font-size: 2rem;
+   margin: 1rem 0;
+   font-weight: bold;
+ }
+
+ #abacus {
+  display: flex;
+  gap: 10px;
+}
+
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.bar {
+  height: 4px;
+  width: 100%;
+  background-color: black;
+  margin: 5px 0;
+}
+
+.divider {
+  width: 100%;
+  height: 4px;
+  background: #333;
+  margin: 0.5rem 0;
+}
+
+.bead {
+  width: 30px;
+  height: 30px;
+  background-color: #d2691e;
+  border-radius: 50%;
+  margin: 2px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+
+.bead.active {
+  transform: translateY(20px);
+}
+
+ #abacus button {
+   font-size: 1.5rem;
+   padding: 0.5rem 1rem;
+   margin: 0 1rem;
+   cursor: pointer;
+ }
+
+ #feedback {
+   margin-top: 1rem;
+   font-size: 1.5rem;
+   color: #888;
+ }
+
+
+#boulier-container {
+  margin-top: 30px;
+}
+
+#score {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+
+#abacus-grid {
+  display: grid;
+  grid-template-rows: repeat(10, 40px); 
+  grid-template-columns: repeat(9, 40px); 
+  gap: 2px;
+  position: relative;
+  margin-top: 20px;
+}
+
+.bead {
+  width: 30px;
+  height: 30px;
+  background-color: sienna;
+  border-radius: 50%;
+  margin: auto;
+  cursor: pointer;
+}
+
+.bar {
+  grid-row: 3 / 4;
+  grid-column: 1 / 10;
+  height: 4px;
+  background-color: black;
+  z-index: 1;
+}
+.abacus-container {
+  max-width: fit-content;
+  margin: 40px auto;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  color: #00ffff;
+  background: #111;
+  padding: 20px;
+  border: 2px solid #00ffff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+.score {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+#abacus-grid {
+  display: grid;
+  grid-template-rows: repeat(10, 40px);
+  grid-template-columns: repeat(9, 40px);
+  gap: 4px;
+  background-color: #000;
+  border: 1px solid #00ffff;
+  padding: 10px;
+  box-shadow: 0 0 15px #00ffff inset;
+}
+
+.bead {
+  width: 30px;
+  height: 30px;
+  background-color: #ff00ff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 6px #ff00ff;
+  transition: transform 0.2s ease;
+}
+
+.bead:hover {
+  box-shadow: 0 0 12px #00ffff;
+  transform: scale(1.1);
+}
+
+.bar {
+  grid-row: 3 / 4;
+  grid-column: 1 / 10;
+  height: 4px;
+  background-color: #00ffff;
+  z-index: 1;
+  border-radius: 2px;
+  box-shadow: 0 0 8px #00ffff;
+}
