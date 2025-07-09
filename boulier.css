@@ -18,22 +18,27 @@
    z-index: -1;
  }
 
- body {
-   background: radial-gradient(circle at center, #000000 0%, #0f0f1b 100%);
-   font-family: 'Orbitron', sans-serif;
-   color: #000000;
-   margin: 0;
-   padding: 2rem;
-   text-align: center;
- }
- .app-container {
-   max-width: 500px;
-   margin: auto;
-   background: #fff;
-   padding: 2rem;
-   border-radius: 12px;
-   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
- }
+body {
+  background: radial-gradient(circle at center, #020202 0%, #0d0d1a 100%);
+  font-family: 'Orbitron', sans-serif;
+  color: #00ffff;
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.app-container {
+  width: 100%;
+  max-width: 1000px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 25px #00ffff, inset 0 0 10px #ff00ff;
+  backdrop-filter: blur(8px);
+}
 
  .calculation-display #calculation {
    font-size: 2rem;
@@ -159,8 +164,13 @@
   border: 1px solid #00ffff;
   padding: 10px;
   box-shadow: 0 0 15px #00ffff inset;
+    border: 2px solid transparent;
+  animation: neon-border 4s infinite alternate;
 }
-
+@keyframes neon-border {
+  0% { border-color: #00ffff; }
+  100% { border-color: #ff00ff; }
+}
 .bead {
   width: 30px;
   height: 30px;
@@ -184,4 +194,52 @@
   z-index: 1;
   border-radius: 2px;
   box-shadow: 0 0 8px #00ffff;
+}
+section {
+  margin-bottom: 2rem;
+}
+
+.difficulty-select select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  background: #111;
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  box-shadow: 0 0 8px #00ffff;
+}
+button {
+  background-color: #111;
+  color: #00ffff;
+  border: 2px solid #00ffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 0 10px #ff00ff;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #222;
+  transform: scale(1.05);
+}
+@media screen and (min-width: 1200px) {
+  .app-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .calculation-display,
+  .difficulty-select,
+  .result-check {
+    text-align: left;
+  }
+
+  #abacus-grid {
+    justify-self: center;
+  }
 }
