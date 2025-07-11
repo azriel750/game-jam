@@ -1,47 +1,76 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8" />
   <title>Boulier</title>
   <link rel="stylesheet" href="boulier.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <div class="start-button">
-            <a href="home.html">Besoin de revoir le tuto ?</a>
-        </div>
-   <main class="app-container">
-    
-   
-    <section class="difficulty-select">
-      <label for="difficulty">Difficulté :</label>
-      <select id="difficulty">
-        <option value="super easy">Super facile</option>
-        <option value="easy">Facile</option>
-        <option value="medium">Moyen</option>
-        <option value="hard">Difficile</option>
-      </select>
-    </section>
+<audio id="clickSound" src="assets/sounds/click.mp3" preload="auto"></audio>
+ <main class="app-container">
+  <audio id="backgroundMusic" src="assets/sounds/music.mp3" autoplay loop></audio>
 
-    <section class="calculation-display">
-      <h2>Résous :</h2>
-      <div id="calculation">7 + 3 = ?</div>
-    </section>
+<label for="volumeControl">Volume :</label>
+<input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" />
+  <div class="interface-panel">
+    <div class="left-panel">
+      <div class="start-button">
+        <a href="home.html">📘 Besoin de revoir <br> le tuto ?</a>
+      </div>
+
+      <section class="difficulty-select pixel-frame">
+        <label for="difficulty">Difficulté :</label><br>
+        <select id="difficulty">
+          <option value="super easy">Super facile</option>
+          <option value="easy">Facile</option>
+          <option value="medium">Moyen</option>
+          <option value="hard">Difficile</option>
+        </select>
+      </section>
+    </div>
+
+    <div class="right-panel">
+      <section class="calculation-display pixel-frame">
+        <h2>Résous :</h2>
+        <div id="calculation">7 + 3 = ?</div>
+      </section>
+
+      <section class="result-check">
+        <button id="check-result">Vérifier</button>
+        <div id="feedback">➖</div>
+      </section>
+
+      
+    </div>
+  </div>
+
+  <div class="abacus-container">
+    <div class="score-display pixel-frame">
+        Score : <span id="abacus-value">0</span>
+      </div>
+    <div id="abacus-grid">
+      <div class="bar"></div>
+      <div class="rod" style="grid-column: 1;"></div>
+      <div class="rod" style="grid-column: 2;"></div>
+      <div class="bead" style="grid-column: 2; grid-row: 1;"></div>
+      <div class="rod" style="grid-column: 3;"></div>
+      <div class="rod" style="grid-column: 4;"></div>
+      <div class="rod" style="grid-column: 5;"></div>
+      <div class="rod" style="grid-column: 6;"></div>
+      <div class="rod" style="grid-column: 7;"></div>
+      <div class="rod" style="grid-column: 8;"></div>
+      <div class="rod" style="grid-column: 9;"></div>
+    </div>
+  </div>
 
   
-    <section class="result-check">
-      <button id="check-result">Vérifier</button>
-      <div id="feedback">➖</div>
-    </section>
-  <div>Score : <span id="abacus-value">0</span></div>
-  <div id="abacus-grid"></div>
-    <button id="reset-abacus">🔄 Réinitialiser le boulier</button>
-  </main>
-
-
-
+<button id="reset-abacus">🔄 Réinitialiser le boulier</button>
+ 
+</main>
+  
   <script src="/dist/script.js" type="module"></script>
 </body>
-
 </html>

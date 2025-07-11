@@ -4,13 +4,20 @@ const calculationEl = document.getElementById("calculation");
 const abacusValueEl = document.getElementById("abacus-value");
 const checkBtn = document.getElementById("check-result");
 const feedbackEl = document.getElementById("feedback");
-const clickSound = new Audio("./assets/sounds/click.mp3");
+const resetBtn = document.getElementById("reset-abacus");
+const grid = document.getElementById("abacus-grid");
+const clickSound = document.getElementById('clickSound');
+const music = document.getElementById('backgroundMusic');
+const volumeControl = document.getElementById('volumeControl');
+music.volume = parseFloat(volumeControl.value);
+volumeControl.addEventListener('input', () => {
+    music.volume = parseFloat(volumeControl.value);
+    console.log('Volume réglé à', music.volume);
+});
 let correctResult = 0;
 let abacusValue = 0;
-const grid = document.getElementById("abacus-grid");
 const columns = 9;
 let beads = [];
-// === Crée les perles ===
 function createBead(row, col, value) {
     const bead = document.createElement("div");
     bead.className = "bead";
@@ -20,45 +27,45 @@ function createBead(row, col, value) {
     bead.addEventListener("click", () => {
         const isLowerBead = row >= 7;
         if (isLowerBead) {
-            const columnBeads = beads.filter(bd => bd.col === col && bd.row >= 7 && bd.row <= row);
             const toggleTo = !b.active;
+            const columnBeads = beads.filter(bd => bd.col === col && (toggleTo ? (bd.row >= 7 && bd.row <= row) : (bd.row >= row && bd.row <= 10)));
             for (const bd of columnBeads) {
                 bd.active = toggleTo;
                 bd.element.style.transform = toggleTo ? "translateY(-150px)" : "translateY(0)";
             }
         }
         else {
-            // Perle haute
-            b.active = !b.active;
-            bead.style.transform = b.active ? "translateY(50px)" : "translateY(0)";
+            const toggleTo = !b.active;
+            const columnBeads = beads.filter(bd => bd.col === col && (toggleTo ? (bd.row >= row && bd.row <= 1) : (bd.row <= row && bd.row >= 1)));
+            for (const bd of columnBeads) {
+                bd.active = toggleTo;
+                bd.element.style.transform = toggleTo ? "translateY(50px)" : "translateY(0)";
+            }
         }
         updateScore();
-        clickSound.currentTime = 0;
-        clickSound.play();
+        if (clickSound) {
+            clickSound.currentTime = 0; // pour pouvoir rejouer rapidement
+            clickSound.play();
+        }
     });
     grid.appendChild(bead);
     return b;
 }
-// === Génère les perles ===
-for (let col = 0; col < columns; col++) {
-    const power = columns - 1 - col;
-    const multiplier = Math.pow(10, power);
-    beads.push(createBead(1, col, 5 * multiplier));
-    for (let row = 7; row <= 10; row++) {
-        beads.push(createBead(row, col, 1 * multiplier));
+function initAbacus() {
+    beads = [];
+    grid.innerHTML = "";
+    for (let col = 0; col < columns; col++) {
+        const power = columns - 1 - col;
+        const multiplier = Math.pow(10, power);
+        beads.push(createBead(1, col, 5 * multiplier));
+        for (let row = 7; row <= 10; row++) {
+            beads.push(createBead(row, col, 1 * multiplier));
+        }
     }
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    grid.appendChild(bar);
 }
-// === Barre de séparation ===
-const bar = document.createElement("div");
-bar.className = "bar";
-grid.appendChild(bar);
-// === Met à jour le score ===
-function updateScore() {
-    const score = beads.filter(b => b.active).reduce((sum, b) => sum + b.value, 0);
-    abacusValue = score;
-    abacusValueEl.textContent = abacusValue.toString();
-}
-// === Calcule un nombre aléatoire entre min et max ===
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -79,32 +86,27 @@ function generateCalculation() {
             correctResult = a + b;
             break;
         case "medium":
-            let n1 = randInt(10, 1000);
-            let n2 = randInt(10, 1000);
-            a = Math.max(n1, n2);
-            b = Math.min(n1, n2);
+            a = randInt(10, 1000);
+            b = randInt(10, 1000);
+            if (b > a)
+                [a, b] = [b, a];
             op = "-";
             correctResult = a - b;
             break;
         case "hard":
-            a = randInt(2, 100);
-            b = randInt(2, 100);
+            a = randInt(2, 1000);
+            b = randInt(2, 1000);
             op = "x";
             correctResult = a * b;
             break;
     }
-    // Affiche correctement le calcul
-    calculationEl.textContent = difficulty === "super easy"
-        ? `${a}`
-        : `${a} ${op} ${b} = ?`;
-    // Réinitialise les billes visuellement et logiquement
-    for (const bead of beads) {
-        bead.active = false;
-        bead.element.style.transform = "translateY(0)";
-    }
+    calculationEl.textContent = difficulty === "super easy" ? `${a}` : `${a} ${op} ${b} = ?`;
     feedbackEl.textContent = "➖";
-    abacusValue = 0;
-    abacusValueEl.textContent = "0";
+    resetAbacus();
+}
+function updateScore() {
+    abacusValue = beads.filter(b => b.active).reduce((sum, b) => sum + b.value, 0);
+    abacusValueEl.textContent = abacusValue.toString();
 }
 function resetAbacus() {
     for (const bead of beads) {
@@ -114,25 +116,22 @@ function resetAbacus() {
     abacusValue = 0;
     abacusValueEl.textContent = "0";
 }
-// === Vérifie la réponse de l'utilisateur ===
 function checkAnswer() {
+    console.log("clic détecté");
     if (abacusValue === correctResult) {
         feedbackEl.textContent = "✅ Bravo !";
         feedbackEl.style.color = "green";
-        resetAbacus();
         setTimeout(() => {
             generateCalculation();
-        }, 1000);
+        }, 800);
     }
     else {
         feedbackEl.textContent = "❌ Réessaie !";
         feedbackEl.style.color = "red";
     }
 }
-// === Événements ===
 checkBtn.addEventListener("click", checkAnswer);
 difficultySelect.addEventListener("change", generateCalculation);
-// ✅ Appelé en dernier, une fois que les perles sont bien créées
-generateCalculation();
-const resetBtn = document.getElementById("reset-abacus");
 resetBtn.addEventListener("click", resetAbacus);
+initAbacus();
+generateCalculation();
